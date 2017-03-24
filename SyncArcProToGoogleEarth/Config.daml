@@ -1,0 +1,37 @@
+﻿<ArcGIS defaultAssembly="SyncArcProToGoogleEarth.dll" defaultNamespace="SyncArcProToGoogleEarth" xmlns="http://schemas.esri.com/DADF/Registry" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://schemas.esri.com/DADF/Registry file:///C:/Program%20Files/ArcGIS/Pro/bin/ArcGIS.Desktop.Framework.xsd">
+  <AddInInfo id="{2e92ae44-c6e6-4cbe-9204-198d784f2b5f}" version="1.0" desktopVersion="1.4.7198">
+    <Name>SyncArcProToGoogleEarth</Name>
+    <Description>SyncArcProToGoogleEarth description</Description>
+    <Image>Images\AddinDesktop32.png</Image>
+    <Author>Stayte</Author>
+    <Company></Company>
+    <Date>3/23/2017 10:53:55 AM, 2017</Date>
+    <Subject>Framework</Subject>
+    <!-- Note subject can be one or more of these topics:
+                    Content, Framework, Editing, Geodatabase, Geometry, Geoprocessing, Layouts, Map Authoring, Map Exploration -->
+  </AddInInfo>
+  <modules>
+    <insertModule id="SyncArcProToGoogleEarth_Module" className="Module" autoLoad="false" caption="Module1">
+      <!-- uncomment to have the control hosted on a separate tab-->
+      <tabs>
+        <!--<tab id="SyncArcProToGoogleEarth_Tab" caption="New Tab">
+          <group refID="SyncArcProToGoogleEarth_Group"/>
+        </tab>-->
+      </tabs>
+      <groups>
+        <!-- comment this out if you have no controls on the Addin tab to avoid
+              an empty group-->
+        <group id="SyncArcProToGoogleEarth_Group" caption="Sync ArcPro To Google Earth" appearsOnAddInTab="true">
+          <!-- host controls within groups -->
+          <button refID="SyncArcProToGoogleEarth_AP2GE" size="large" />
+        </group>
+      </groups>
+      <controls>
+        <!-- add your controls here -->
+        <button id="SyncArcProToGoogleEarth_AP2GE" caption="AP 2GE" className="AP2GE" loadOnClick="true" smallImage="Images\GenericButtonBlue16.png" largeImage="Images\GenericButtonBlue32.png">
+          <tooltip heading="Tooltip Heading">Tooltip text<disabledText /></tooltip>
+        </button>
+      </controls>
+    </insertModule>
+  </modules>
+</ArcGIS>
