@@ -1,4 +1,28 @@
-﻿using ArcGIS.Core.Geometry;
+﻿/*
+MIT License
+
+Copyright(c) 2017 Chris Stayte
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
+using ArcGIS.Core.Geometry;
 using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
@@ -6,6 +30,7 @@ using ArcGIS.Desktop.Mapping.Events;
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using MessageBox = ArcGIS.Desktop.Framework.Dialogs.MessageBox;
 
 namespace SyncArcProToGoogleEarth
 {
@@ -16,44 +41,32 @@ namespace SyncArcProToGoogleEarth
         static private String _currentViewFileName = "AP2GE_CurrentView.kml";
         static private String _networkLinkFileName = "AP2GE_NetworkLink.kml";
 
-        private String _latitude = "";
-        private String _longitude = "";
-        private String _altitude = "";
+        // Default Location Is Batman Building In Japan
+        private String _latitude = "26.357896";
+        private String _longitude = "127.783809";
+        private String _altitude = "100";
         private String _heading = "0";
         private String _tilt = "0";
-
-        private bool _cameraExisted = true;
-
-        private enum enumLongLat
-        {
-            Latitude = 1,
-            Longitude = 2
-        };
-
-        private enum enumReturnFormat
-        {
-            WithSigns = 0,
-            NMEA = 1
-        }
 
         #region Button 
 
         private AP2GE()
         {
-            _saveDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"\AP2GE\");
+            _saveDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"AP2GE\");
+            MessageBox.Show(_saveDirectory);
         }
 
         protected override void OnClick()
         {
             if (this.IsChecked)
             {
-                MapViewCameraChangedEvent.Unsubscribe(test);
+                MapViewCameraChangedEvent.Unsubscribe(MapViewCameraCanged);
 
                 this.IsChecked = false;
             }
             else
             {
-                MapViewCameraChangedEvent.Subscribe(test, false);
+                MapViewCameraChangedEvent.Subscribe(MapViewCameraCanged, false);
 
                 WriteCurrentView();
                 WriteNetworkLink();
@@ -66,37 +79,13 @@ namespace SyncArcProToGoogleEarth
 
         #region Methods
 
-        private void test(MapViewCameraChangedEventArgs args)
+        private void MapViewCameraCanged(MapViewCameraChangedEventArgs args)
         {
             MapView map = args.MapView;
             if (map != null)
             {
                 SyncViews(map);
             }
-        }
-
-        private void drawStarted(MapViewEventArgs args)
-        {
-            MapView map = args.MapView;
-            if (map == null) return;
-            if (map.Camera != null)
-            {
-                SyncViews(map);
-                return;
-            }
-            _cameraExisted = false;
-        }
-
-        private void drawCompleted(MapViewEventArgs args)
-        {
-            MapView map = args.MapView;
-            if (map == null) return;
-            if (!_cameraExisted)
-            {
-                SyncViews(map);
-                _cameraExisted = true;
-            }
-           
         }
 
         private async void SyncViews(MapView map)
