@@ -12,7 +12,7 @@ Sync ArcGIS Pro's Camera To Google Earth Actively.
 
 
 ### Download
-- **ArcGIS Pro V1.4 - [Link](https://github.com/ChrisStayte/ArcPro_To_GoogleEarth/releases/download/v1.2/SyncArcProToGoogleEarth.zip)**
+- **ArcGIS Pro V1.4 - [Download Link](https://github.com/ChrisStayte/ArcPro_To_GoogleEarth/releases/download/v1.2/SyncArcProToGoogleEarth.zip)**
 
 ### License
 
