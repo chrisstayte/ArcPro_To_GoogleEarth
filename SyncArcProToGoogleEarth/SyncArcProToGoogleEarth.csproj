@@ -100,16 +100,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <AddInContent Include="Images\GenericButtonBlue16.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AddInContent Include="Images\GenericButtonBlue32.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AddInContent Include="DarkImages\GenericButtonBlue16.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AddInContent Include="DarkImages\GenericButtonBlue32.png" />
+    <AddInContent Include="Images\GoogleEarth_16.png" />
+    <AddInContent Include="Images\GoogleEarth_32.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!--

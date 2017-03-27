@@ -62,6 +62,14 @@ namespace SyncArcProToGoogleEarth
             {
                 MapViewCameraChangedEvent.Unsubscribe(MapViewCameraCanged);
                 this.IsChecked = false;
+                this.Caption = "Activate";
+
+                string currentViewFile = Path.Combine(_saveDirectory, _currentViewFileName);
+
+                if (File.Exists(currentViewFile))
+                {
+                    File.Delete(currentViewFile);
+                }
             }
             else
             {
@@ -69,6 +77,7 @@ namespace SyncArcProToGoogleEarth
                 WriteCurrentView();
                 WriteNetworkLink();
                 this.IsChecked = true;
+                this.Caption = "Deactivate";
             }
         }
 
