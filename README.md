@@ -12,7 +12,7 @@ Sync ArcGIS Pro's Camera To Google Earth Actively
 | Next is to configure Google Earth<br/><br/>Open Google Earth and go to Tools -> Options<br/><br/>Then go to the Navigation Tab<br/><br/>Change the Fly-To Speed to 5<br/><br/>*This only needs to be done once per user / per machine | ![alt tag](Images/google_earth_config.png)|
 | You can find the tool on the 'ADD-IN' tab in ArcGIS Pro | ![alt tab](Images/AddInTab.png) |
 
- ### Buy A developer a lunch !
+ ### Buy a developer a lunch !
 <span class="badge-paypal"><a href="https://paypal.me/ChrisStayte" title="Donate to this project using Paypal"><img src="http://ChrisStayte.com/img/paypal_donate.png" alt="PayPal donate button" /></a></span>
 
 ### License
