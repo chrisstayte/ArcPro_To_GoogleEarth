@@ -1,9 +1,9 @@
 ﻿<ArcGIS defaultAssembly="SyncArcProToGoogleEarth.dll" defaultNamespace="SyncArcProToGoogleEarth" xmlns="http://schemas.esri.com/DADF/Registry" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://schemas.esri.com/DADF/Registry file:///C:/Program%20Files/ArcGIS/Pro/bin/ArcGIS.Desktop.Framework.xsd">
-  <AddInInfo id="{2e92ae44-c6e6-4cbe-9204-198d784f2b5f}" version="1.0" desktopVersion="1.4.7198">
+  <AddInInfo id="{2e92ae44-c6e6-4cbe-9204-198d784f2b5f}" version="1.2" desktopVersion="1.4.7198">
     <Name>SyncArcProToGoogleEarth</Name>
-    <Description>SyncArcProToGoogleEarth description</Description>
+    <Description>Sync's ArcPro To Google Earth</Description>
     <Image>Images\AddinDesktop32.png</Image>
-    <Author>Stayte</Author>
+    <Author>Chris Stayte</Author>
     <Company></Company>
     <Date>3/23/2017 10:53:55 AM, 2017</Date>
     <Subject>Framework</Subject>

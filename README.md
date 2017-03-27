@@ -1,6 +1,9 @@
 # ArcPro To GoogleEarth
 
-Sync ArcGIS Pro's Camera To Google Earth Actively.
+Sync ArcGIS Pro's Camera To Google Earth Actively
+
+### Downloads
+- **ArcGIS Pro V1.4 - [Download Link](https://github.com/ChrisStayte/ArcPro_To_GoogleEarth/releases/download/v1.2/SyncArcProToGoogleEarth.zip)**
 
 ### Setup Instructions
 | Step | Image |
@@ -10,9 +13,6 @@ Sync ArcGIS Pro's Camera To Google Earth Actively.
 | Next is to configure Google Earth<br/><br/>Open Google Earth and go to Tools -> Options<br/><br/>Then go to the Navigation Tab<br/><br/>Change the Fly-To Speed to 5<br/><br/>*This only need to be done once per user / per machine | ![alt tag](Images/google_earth_config.png)|
 | You can find the tool on the 'Addin' tab in ArcGIS Pro | ![alt tab](Images/AddInTab.png) |
 
-
-### Downloads
-- **ArcGIS Pro V1.4 - [Download Link](https://github.com/ChrisStayte/ArcPro_To_GoogleEarth/releases/download/v1.2/SyncArcProToGoogleEarth.zip)**
 
 ### License
 
