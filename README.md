@@ -11,7 +11,7 @@ Sync ArcGIS Pro's Camera To Google Earth Actively.
 | You can find the tool on the 'Addin' tab in ArcGIS Pro | ![alt tab](Images/AddInTab.png) |
 
 
-### Download
+### Downloads
 - **ArcGIS Pro V1.4 - [Download Link](https://github.com/ChrisStayte/ArcPro_To_GoogleEarth/releases/download/v1.2/SyncArcProToGoogleEarth.zip)**
 
 ### License
