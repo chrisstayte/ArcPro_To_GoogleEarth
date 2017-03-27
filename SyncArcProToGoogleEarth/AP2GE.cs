@@ -28,6 +28,7 @@ using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
 using ArcGIS.Desktop.Mapping.Events;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using MessageBox = ArcGIS.Desktop.Framework.Dialogs.MessageBox;
@@ -53,7 +54,6 @@ namespace SyncArcProToGoogleEarth
         private AP2GE()
         {
             _saveDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"AP2GE\");
-            MessageBox.Show(_saveDirectory);
         }
 
         protected override void OnClick()
@@ -61,16 +61,13 @@ namespace SyncArcProToGoogleEarth
             if (this.IsChecked)
             {
                 MapViewCameraChangedEvent.Unsubscribe(MapViewCameraCanged);
-
                 this.IsChecked = false;
             }
             else
             {
                 MapViewCameraChangedEvent.Subscribe(MapViewCameraCanged, false);
-
                 WriteCurrentView();
                 WriteNetworkLink();
-
                 this.IsChecked = true;
             }
         }
@@ -81,32 +78,27 @@ namespace SyncArcProToGoogleEarth
 
         private void MapViewCameraCanged(MapViewCameraChangedEventArgs args)
         {
-            MapView map = args.MapView;
-            if (map != null)
+            MapView mapView = args.MapView;
+
+            if (mapView != null)
             {
-                SyncViews(map);
+                SyncViews(mapView);
             }
         }
 
-        private async void SyncViews(MapView map)
+        private async void SyncViews(MapView mapView)
         {
-
+            // Get Altitude *Google Earth Range
             MapPoint lowerLeftPoint = null;
             MapPoint upperRightPoint = null;
 
             await QueuedTask.Run(() =>
             {
-                lowerLeftPoint = MapPointBuilder.CreateMapPoint(map.Extent.XMin, map.Extent.YMin, map.Extent.SpatialReference);
-                upperRightPoint = MapPointBuilder.CreateMapPoint(map.Extent.XMax, map.Extent.YMax, map.Extent.SpatialReference);
+                lowerLeftPoint = MapPointBuilder.CreateMapPoint(mapView.Extent.XMin, mapView.Extent.YMin, mapView.Extent.SpatialReference);
+                upperRightPoint = MapPointBuilder.CreateMapPoint(mapView.Extent.XMax, mapView.Extent.YMax, mapView.Extent.SpatialReference);
             });
 
-            double latXmin;
-            double latXmax;
-
-            double longYmin;
-            double longYmax;
-
-            double diagonal;
+            double latXmin, latXmax, longYmin, longYmax, diagonal;
 
             Tuple<double, double> tupleResult = null;
 
@@ -118,17 +110,22 @@ namespace SyncArcProToGoogleEarth
             longYmax = tupleResult.Item1;
             latXmax = tupleResult.Item2;
 
-            diagonal = Math.Round(distance(latXmin, longYmin, latXmax, longYmax, 'K') * 1000, 2); // 1km * 1000
+            diagonal = Math.Round(DistanceBetweenPoints(latXmin, longYmin, latXmax, longYmax, 'K') * 1000, 2); // 1km * 1000m
 
-            _altitude = Convert.ToString(0.5 * Math.Sqrt(3) * diagonal);
+            double altitude = diagonal * Math.Sqrt(3) * 0.5;
+
+            _altitude = altitude.ToString();
 
 
+
+            // Longitude, Latitude
             MapPoint point = null;
 
             await QueuedTask.Run(() =>
             {
-                Coordinate coordinate = new Coordinate(((map.Extent.XMax + map.Extent.XMin) / 2), ((map.Extent.YMax + map.Extent.YMin) / 2));
-                MapPointBuilder pointBuilder = new MapPointBuilder(coordinate, map.Extent.SpatialReference);
+                Coordinate coordinate = new Coordinate(mapView.Camera.X, mapView.Camera.Y);
+                //Coordinate coordinate = new Coordinate(((map.Extent.XMax + map.Extent.XMin) / 2), ((map.Extent.YMax + map.Extent.YMin) / 2));
+                MapPointBuilder pointBuilder = new MapPointBuilder(coordinate, mapView.Extent.SpatialReference);
                 point = pointBuilder.ToGeometry();
             });
 
@@ -142,13 +139,18 @@ namespace SyncArcProToGoogleEarth
             _latitude = Convert.ToString(Math.Round(latitude, 5));
             _longitude = Convert.ToString(Math.Round(longitude, 5));
 
+            // Altitude
+            // Arcmap Heading 0, 90, 180, -90:       Point of Reference is the Camera
+            // Google Earth Heading 0, 90, 180, 270: Point of Reference is the Bearing
+            double heading = mapView.Camera.Heading;
+            heading = 360 - (heading < 0 ? (heading + 360) : heading);  // Flip Point of Reference - Flip to 360 
+            _heading = heading.ToString();  
 
-            double heading = map.Camera.Heading;
-            heading = heading < 0 ? (heading + 360) : heading;
-            _heading = Convert.ToString(360 - heading);
 
-
-            _tilt = map.Camera.Roll.ToString();
+            // Tilt
+            double tilt = (mapView.Camera.Pitch + 90); // Convert To Google Earth Formatting
+            _tilt = tilt.ToString();
+            
 
             WriteCurrentView();
         }
@@ -229,10 +231,7 @@ namespace SyncArcProToGoogleEarth
                     spatialReferenceBuilder.XYScale = 1000000;
 
                     spatialReference = spatialReferenceBuilder.ToSpatialReference();
-                });
-                
-
-                
+                }); 
 
                 Geometry geometry = (Geometry)point;
 
@@ -252,15 +251,15 @@ namespace SyncArcProToGoogleEarth
             return null;
         }
 
-        private double distance(double lat1, double lon1, double lat2, double lon2, char unit)
+        private double DistanceBetweenPoints(double lat1, double lon1, double lat2, double lon2, char unit)
         {
             //'M' is statute miles
             //'K' is kilometers (default)
             //'N' is nautical miles  
             double theta = lon1 - lon2;
-            double dist = Math.Sin(degrees2radians(lat1)) * Math.Sin(degrees2radians(lat2)) + Math.Cos(degrees2radians(lat1)) * Math.Cos(degrees2radians(lat2)) * Math.Cos(degrees2radians(theta));
+            double dist = Math.Sin(ConvertDegrees2Radians(lat1)) * Math.Sin(ConvertDegrees2Radians(lat2)) + Math.Cos(ConvertDegrees2Radians(lat1)) * Math.Cos(ConvertDegrees2Radians(lat2)) * Math.Cos(ConvertDegrees2Radians(theta));
             dist = Math.Acos(dist);
-            dist = radians2degrees(dist);
+            dist = ConvertRadians2Degrees(dist);
             dist = dist * 60 * 1.1515;
             if (unit == 'K')
             {
@@ -273,12 +272,12 @@ namespace SyncArcProToGoogleEarth
             return (dist);
         }
 
-        private double degrees2radians(Double deg)
+        private double ConvertDegrees2Radians(Double deg)
         {
             return (deg * Math.PI / 180.0);
         }
 
-        private double radians2degrees(Double rad)
+        private double ConvertRadians2Degrees(Double rad)
         {
             return (rad / Math.PI * 180.0);
         }
