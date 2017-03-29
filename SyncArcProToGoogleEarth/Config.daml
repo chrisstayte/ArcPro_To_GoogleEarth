@@ -21,14 +21,14 @@
       <groups>
         <!-- comment this out if you have no controls on the Addin tab to avoid
               an empty group-->
-        <group id="SyncArcProToGoogleEarth_Group" caption="Sync ArcPro To Google Earth" appearsOnAddInTab="true">
+        <group id="SyncArcProToGoogleEarth_Group" caption="Sync ArcPro To Google Earth" appearsOnAddInTab="true" keytip="ArcProToGoogleEarth">
           <!-- host controls within groups -->
           <button refID="SyncArcProToGoogleEarth_AP2GE" size="large" />
         </group>
       </groups>
       <controls>
         <!-- add your controls here -->
-        <button id="SyncArcProToGoogleEarth_AP2GE" caption="Activate" className="AP2GE" loadOnClick="true" smallImage="Images\GoogleEarth_16.png" largeImage="Images\GoogleEarth_32.png">
+        <button id="SyncArcProToGoogleEarth_AP2GE" keytip="AP2GE" caption="Activate" className="AP2GE" loadOnClick="true" smallImage="Images\GoogleEarth_16.png" largeImage="Images\GoogleEarth_32.png">
           <tooltip heading="Tooltip Heading">Tooltip text<disabledText /></tooltip>
         </button>
       </controls>
