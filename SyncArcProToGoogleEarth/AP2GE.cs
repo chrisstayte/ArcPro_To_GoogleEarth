@@ -139,7 +139,7 @@ namespace SyncArcProToGoogleEarth
 
             await QueuedTask.Run(() =>
             {
-                Coordinate coordinate = new Coordinate(mapView.Camera.X, mapView.Camera.Y);
+                Coordinate2D coordinate = new Coordinate2D(mapView.Camera.X, mapView.Camera.Y);
                 //Coordinate coordinate = new Coordinate(((map.Extent.XMax + map.Extent.XMin) / 2), ((map.Extent.YMax + map.Extent.YMin) / 2));
                 MapPointBuilder pointBuilder = new MapPointBuilder(coordinate, mapView.Extent.SpatialReference);
                 point = pointBuilder.ToGeometry();
@@ -255,7 +255,7 @@ namespace SyncArcProToGoogleEarth
 
                 await QueuedTask.Run(() =>
                 {
-                    newPoint = GeometryEngine.Project(geometry, spatialReference) as MapPoint;
+                    newPoint = GeometryEngine.Instance.Project(geometry, spatialReference) as MapPoint;
                 });
 
                 return new Tuple<double, double>(newPoint.X, newPoint.Y);
